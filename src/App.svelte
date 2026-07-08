@@ -160,10 +160,6 @@
     const delta = e.deltaY < 0 ? 5 : -5;
     invoke("adjust_volume", { delta }).catch((err) => console.error(err));
   }
-  function onVolumeRight(e: MouseEvent) {
-    e.preventDefault();
-    invoke("adjust_volume", { delta: -5 }).catch((err) => console.error(err));
-  }
   function onBrightnessClick() {
     invoke("adjust_brightness", { delta: 5 }).catch((e) => console.error(e));
   }
@@ -358,7 +354,6 @@
         class={`pill volume-pill ${!audio || audio.is_muted || !audio.has_device ? "muted" : ""}`}
         onclick={onToggleMute}
         onwheel={onVolumeWheel}
-        oncontextmenu={onVolumeRight}
         role="button"
         tabindex="0"
         onkeydown={(e) => e.key === "Enter" && onToggleMute()}
