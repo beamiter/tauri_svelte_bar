@@ -175,22 +175,27 @@
 
   onMount(async () => {
     console.log("Tauri Svelte frontend has loaded.");
-    unlistenMonitor = await listen<MonitorInfoSnapshot>(
-      "monitor-update",
-      (e) => (monitor = e.payload),
-    );
-    unlistenSystem = await listen<SystemSnapshot>(
-      "system-update",
-      (e) => (system = e.payload),
-    );
-    unlistenAudio = await listen<AudioSnapshot>(
-      "audio-update",
-      (e) => (audio = e.payload),
-    );
-    unlistenBrightness = await listen<BrightnessSnapshot>(
-      "brightness-update",
-      (e) => (brightness = e.payload),
-    );
+    try {
+      unlistenMonitor = await listen<MonitorInfoSnapshot | null>(
+        "monitor-update",
+        (e) => (monitor = e.payload),
+      );
+      unlistenSystem = await listen<SystemSnapshot>(
+        "system-update",
+        (e) => (system = e.payload),
+      );
+      unlistenAudio = await listen<AudioSnapshot>(
+        "audio-update",
+        (e) => (audio = e.payload),
+      );
+      unlistenBrightness = await listen<BrightnessSnapshot>(
+        "brightness-update",
+        (e) => (brightness = e.payload),
+      );
+      await invoke<void>("frontend_ready");
+    } catch (error) {
+      console.error("Failed to initialize Tauri event bridge:", error);
+    }
   });
 
   $effect(() => {
